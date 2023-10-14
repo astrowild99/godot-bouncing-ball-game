@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cl3t47t7iwnd5"]
+
+[ext_resource type="PackedScene" uid="uid://6kbk5swfi8a7" path="res://scenes/cannon.tscn" id="1_7uibq"]
+
+[node name="Game" type="Node2D"]
+
+[node name="Cannon" parent="." instance=ExtResource("1_7uibq")]
+position = Vector2(578, 649)
+metadata/_edit_group_ = true
