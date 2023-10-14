@@ -11,10 +11,11 @@ signal field_exceeded
 
 # region public vars
 @export_group("tiles")
-@export var field_tile_width: int = 3
+@export var field_tile_width: int = 5
 @export var field_tile_height: int = 10
 @export var tile_len: float = 50
 @export var tile_scene: PackedScene
+@export var wall_scene: PackedScene
 
 @export_group("difficulty")
 @export var holes_probabilty: int = 2 # the fraction of probability, 1 is 1/2 and so on
@@ -67,11 +68,28 @@ func scroll_field():
 	for t in tiles_array:
 		if t != null:
 			t.scroll(tile_len)
+
+func generate_walls():
+	var top_wall: Wall = wall_scene.instantiate()
+	top_wall.position.y = field_top_height - (1.5 * tile_len)
+	top_wall.position.x = cannon.position.x
+	add_child(top_wall)
+	var left_wall: Wall = wall_scene.instantiate()
+	left_wall.position.y = (get_viewport_rect().size.y + field_top_height) / 2
+	left_wall.position.x = cannon.position.x - ((field_tile_width / 2) * tile_len) - tile_len
+	left_wall.rotation = PI/2
+	add_child(left_wall)
+	var right_wall: Wall = wall_scene.instantiate()
+	right_wall.position.y = (get_viewport_rect().size.y + field_top_height) / 2
+	right_wall.position.x = cannon.position.x + ((field_tile_width / 2) * tile_len) + tile_len
+	right_wall.rotation = PI/2
+	add_child(right_wall)
 # endregion field generation
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	field_top_height = cannon.position.y - (tile_len * field_tile_height)
+	generate_walls()
 	generate_row()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://bqdblvb3f770w"]
+
+[ext_resource type="PhysicsMaterial" uid="uid://bj4aedlsdqwts" path="res://physics/tile.tres" id="1_rnpje"]
+[ext_resource type="Script" path="res://script/wall.gd" id="2_akfyc"]
+[ext_resource type="Texture2D" uid="uid://iue1342pqast" path="res://res/sprite/wall.png" id="2_sheby"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2p44a"]
+size = Vector2(1002, 10)
+
+[node name="Wall" type="StaticBody2D"]
+collision_layer = 4
+collision_mask = 7
+physics_material_override = ExtResource("1_rnpje")
+script = ExtResource("2_akfyc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(1, 0.01)
+texture = ExtResource("2_sheby")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_2p44a")

@@ -1,13 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://cl3t47t7iwnd5"]
+[gd_scene load_steps=6 format=3 uid="uid://cl3t47t7iwnd5"]
 
 [ext_resource type="PackedScene" uid="uid://6kbk5swfi8a7" path="res://scenes/cannon.tscn" id="1_7uibq"]
 [ext_resource type="Script" path="res://script/game.gd" id="1_y8qco"]
 [ext_resource type="PackedScene" uid="uid://lak7wqcgxa7r" path="res://scenes/ball.tscn" id="2_tytcf"]
+[ext_resource type="PackedScene" uid="uid://bqdblvb3f770w" path="res://scenes/wall.tscn" id="3_3wdfm"]
 [ext_resource type="PackedScene" uid="uid://blmtkbpnpl70m" path="res://scenes/tile.tscn" id="3_8jol6"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_y8qco")
 tile_scene = ExtResource("3_8jol6")
+wall_scene = ExtResource("3_3wdfm")
 
 [node name="Cannon" parent="." instance=ExtResource("1_7uibq")]
 position = Vector2(578, 630)
