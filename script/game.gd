@@ -1,8 +1,8 @@
-extends RigidBody2D
-class_name Ball
+extends Node2D
 
-signal leaving_screen
+# region field generation
 
+# endregion field generation
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -11,11 +11,3 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
-
-func _on_visible_on_screen_notifier_2d_screen_exited():
-	leaving_screen.emit()
-	queue_free()
-
-func _on_body_entered(body):
-	if (body is Tile):
-		body.on_hit()

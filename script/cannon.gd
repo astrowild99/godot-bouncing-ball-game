@@ -46,7 +46,6 @@ func _ready():
 # region process
 
 func shoot():
-	print("I am shooting baby")
 	var ball: Ball = ball_scene.instantiate()
 	var new_ball_rotation = get_rotation()
 	ball.linear_velocity = Vector2(bullet_speed, 0.0).rotated(new_ball_rotation)

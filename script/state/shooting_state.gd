@@ -2,6 +2,7 @@ extends CannonState
 class_name ShootingCannonState
 
 func on_transition():
+	print("shooting")
 	cannon.bullets = cannon.max_bullets
 	cannon.bullets_on_screen = cannon.max_bullets
 	cannon.shooting_delay.start()

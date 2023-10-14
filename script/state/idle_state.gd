@@ -2,7 +2,7 @@ extends CannonState
 class_name IdleCannonState
 
 func on_transition():
-	print("going back to idle")
+	print("idle")
 
 func process_input(delta):
 	var expected_rotation = cannon.rotation_degrees
