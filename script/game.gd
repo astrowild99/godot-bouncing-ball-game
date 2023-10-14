@@ -15,11 +15,12 @@ signal field_exceeded
 @export var field_tile_height: int = 10
 @export var tile_len: float = 50
 @export var tile_scene: PackedScene
+@export var bonus_scene: PackedScene
 @export var wall_scene: PackedScene
 
 @export_group("difficulty")
-@export var holes_probabilty: int = 2 # the fraction of probability, 1 is 1/2 and so on
-# todo add bonus probability
+@export var holes_probability: int = 2 # the fraction of probability, 1 is 1/2 and so on
+@export var bonus_probability: int = 3 # one over 3 should be 
 # endregion public vars
 
 # region private vars
@@ -41,12 +42,18 @@ func check_generated_row_is_not_empty(arr: Array):
 func generate_row():
 	# first I define an array with the tiles to be created
 	var arr = []
+	var bonus_arr = []
 	for n in range(0, field_tile_width):
 		# first I check for the probability
-		if (randi() % holes_probabilty == 0):
+		if (randi() % holes_probability == 0):
 			arr.append(0)
+			bonus_arr.append(0)
+		elif (randi() % bonus_probability == 0):
+			arr.append(0)
+			bonus_arr.append(1)
 		else:
 			arr.append(randi() % (current_max + 1)) # this random is not so random
+			bonus_arr.append(0)
 	
 	check_generated_row_is_not_empty(arr)
 	
@@ -62,6 +69,14 @@ func generate_row():
 			add_child(tile)
 			tile.init(arr[m], m, 0)
 			tiles_array.append(tile)
+		elif (bonus_arr[m] > 0):
+			var bonus_tile: Bonus = bonus_scene.instantiate()
+			bonus_tile.position = Vector2(limit_left)
+			bonus_tile.position.x = limit_left.x + (m * tile_len)
+			add_child(bonus_tile) 
+			bonus_tile.init(m, 0)
+			bonus_tile.bonus.connect(_on_bonus_bonus)
+			tiles_array.append(bonus_tile)
 
 # scrolls down the field by one
 func scroll_field():
@@ -96,8 +111,10 @@ func _ready():
 func _process(delta):
 	pass
 
-
 func _on_cannon_shooting_done():
 	scroll_field()
 	generate_row()
 	current_max += 1
+
+func _on_bonus_bonus():
+	cannon.max_bullets += 1
