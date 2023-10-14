@@ -20,6 +20,7 @@ signal field_exceeded
 @export var wall_scene: PackedScene
 
 @export_group("difficulty")
+@export var value_range: int = 2 # how much more - less can the new numbers be related to the current max
 @export var holes_probability: int = 2 # the fraction of probability, 1 is 1/2 and so on
 @export var bonus_probability: int = 3 # one over 3 should be 
 # endregion public vars
@@ -53,7 +54,13 @@ func generate_row():
 			arr.append(0)
 			bonus_arr.append(1)
 		else:
-			arr.append(randi() % (current_max + 1)) # this random is not so random
+			# here I randomly pick the difference from the current max
+			var random_delta = randi() % value_range
+			var negative = randi() % 2 == 0
+			if negative:
+				arr.append(current_max - random_delta)
+			else:
+				arr.append(current_max + random_delta) 
 			bonus_arr.append(0)
 	
 	check_generated_row_is_not_empty(arr)
@@ -118,6 +125,7 @@ func _on_cannon_shooting_done():
 	scroll_field()
 	generate_row()
 	gui.update_score(current_max)
+	gui.update_balls(cannon.max_bullets)
 	gui.reset_hit()
 	current_max += 1
 

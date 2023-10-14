@@ -1,13 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://lak7wqcgxa7r"]
+[gd_scene load_steps=5 format=3 uid="uid://lak7wqcgxa7r"]
 
 [ext_resource type="Texture2D" uid="uid://rifidgqwq40m" path="res://res/sprite/ball.png" id="1_g3djs"]
 [ext_resource type="Script" path="res://script/ball.gd" id="1_pf32j"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_xn6ec"]
+friction = 0.0
+bounce = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gabwe"]
 radius = 9.0
 
 [node name="Ball" type="RigidBody2D"]
 collision_mask = 6
+physics_material_override = SubResource("PhysicsMaterial_xn6ec")
 max_contacts_reported = 2
 contact_monitor = true
 script = ExtResource("1_pf32j")

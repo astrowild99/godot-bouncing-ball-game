@@ -32,6 +32,10 @@ text = "Score: 0"
 layout_mode = 2
 text = "Hits: 0"
 
+[node name="Balls" type="Label" parent="GUI"]
+layout_mode = 2
+text = "Balls: 0"
+
 [connection signal="field_exceeded" from="." to="." method="_on_field_exceeded"]
 [connection signal="hit" from="Cannon" to="." method="_on_cannon_hit"]
 [connection signal="shooting_done" from="Cannon" to="." method="_on_cannon_shooting_done"]

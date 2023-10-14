@@ -4,6 +4,7 @@ class_name Gui
 # region private vars
 var hits: int = 0
 var score: int = 0
+var balls: int = 0
 # endregion private vars
 
 # Called when the node enters the scene tree for the first time.
@@ -26,4 +27,8 @@ func reset_hit():
 func update_score(p_score: int):
 	score = p_score
 	$Score.set_text("Score: " + str(score))
+
+func update_balls(p_balls: int):
+	balls = p_balls
+	$Balls.set_text("Balls: " + str(balls))
 	

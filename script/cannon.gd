@@ -15,7 +15,7 @@ signal hit # when a ball hit something
 
 @export_group("bullet")
 @onready var shooting_delay = $ShootingDelay
-@export var bullet_speed = 800
+@export var bullet_speed = 1000
 
 @export_group("")
 @export var max_bullets: int = 1 # gets updated when the user takes a +1 block
