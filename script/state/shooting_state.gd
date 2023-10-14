@@ -3,6 +3,7 @@ class_name ShootingCannonState
 
 func on_transition():
 	cannon.bullets = cannon.max_bullets
+	cannon.bullets_on_screen = cannon.max_bullets
 	cannon.shooting_delay.start()
 
 func on_shooting_delay_timeout():
@@ -12,4 +13,8 @@ func on_shooting_delay_timeout():
 		cannon.shooting_delay.start()
 	else:
 		cannon.bullets = cannon.max_bullets
+
+func on_ball_leaving_screen():
+	cannon.bullets_on_screen -= 1
+	if (cannon.bullets_on_screen <= 0):
 		cannon.state = cannon.state_factory.get_state("idle")

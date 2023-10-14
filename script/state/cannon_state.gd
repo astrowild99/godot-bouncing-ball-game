@@ -17,6 +17,10 @@ func on_process(delta):
 # this is called when the shooting delay timer times out
 func on_shooting_delay_timeout():
 	pass
+
+# this is called when a ball is leaving the screen
+func on_ball_leaving_screen():
+	pass
 # endregion events
 
 # region inputs

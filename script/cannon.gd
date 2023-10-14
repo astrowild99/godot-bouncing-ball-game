@@ -15,11 +15,17 @@ class_name Cannon
 @export_group("")
 @export var max_bullets: int = 1 # gets updated when the user takes a +1 block
 @export var ball_scene: PackedScene # the ball
-var bullets: int = max_bullets # gets updated during the shooting
 # endregion public vars
 # region private vars
 var state_factory: CannonStateFactory = CannonStateFactory.new(self)
 var state: CannonState
+
+var bullets: int = max_bullets # gets updated during the shooting
+
+# every time I enter the shooting state, I set this as the current number of playing 
+# balls
+# every time a ball leaves the screen I decrease this until it is one
+var bullets_on_screen: int = 0
 # endregion private vars
 
 # region init
@@ -41,11 +47,11 @@ func _ready():
 
 func shoot():
 	print("I am shooting baby")
-	var ball = ball_scene.instantiate()
+	var ball: Ball = ball_scene.instantiate()
 	var new_ball_rotation = get_rotation()
 	ball.linear_velocity = Vector2(bullet_speed, 0.0).rotated(new_ball_rotation)
-	print(ball.linear_velocity)
 	add_child(ball)
+	ball.leaving_screen.connect(_on_ball_leaving_screen)
 
 func _process(delta):
 	state.process_input(delta)
@@ -56,4 +62,7 @@ func _process(delta):
 # region events
 func _on_shooting_delay_timeout():
 	state.on_shooting_delay_timeout()
+
+func _on_ball_leaving_screen():
+	state.on_ball_leaving_screen()
 # endregion events
