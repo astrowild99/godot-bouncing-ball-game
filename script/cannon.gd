@@ -1,6 +1,10 @@
 extends Area2D
 class_name Cannon
 
+# region signal
+signal shooting_done # emit when I am done with shooting and going back to idle
+# endregion signal
+
 # region public vars
 # angles are in degrees, moving from 0 (full right) to 180 (full left)
 @export_group("mobility")

@@ -18,4 +18,5 @@ func on_shooting_delay_timeout():
 func on_ball_leaving_screen():
 	cannon.bullets_on_screen -= 1
 	if (cannon.bullets_on_screen <= 0):
+		cannon.shooting_done.emit()
 		cannon.state = cannon.state_factory.get_state("idle")
