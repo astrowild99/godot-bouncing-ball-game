@@ -82,7 +82,9 @@ func generate_row():
 func scroll_field():
 	for t in tiles_array:
 		if t != null:
-			t.scroll(tile_len)
+			var new_val = t.scroll(tile_len)
+			if new_val > field_tile_height:
+				field_exceeded.emit()
 
 func generate_walls():
 	var top_wall: Wall = wall_scene.instantiate()
@@ -118,3 +120,8 @@ func _on_cannon_shooting_done():
 
 func _on_bonus_bonus():
 	cannon.max_bullets += 1
+
+
+func _on_field_exceeded():
+	print("game over")
+	get_tree().quit()

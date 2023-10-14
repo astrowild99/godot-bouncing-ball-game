@@ -28,9 +28,10 @@ func init(shots: int, position_x: int, position_y: int):
 	field_position_y = position_y
 	print_missing_shots()
 
-func scroll(len: float):
+func scroll(len: float) -> int:
 	field_position_y += 1
 	position.y += len
+	return field_position_y
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

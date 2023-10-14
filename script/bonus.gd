@@ -12,9 +12,10 @@ func init(position_x: int, position_y: int):
 	field_position_x = position_x
 	field_position_y = position_y
 
-func scroll(len: float):
+func scroll(len: float) -> int:
 	field_position_y += 1
 	position.y += len
+	return field_position_y
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
