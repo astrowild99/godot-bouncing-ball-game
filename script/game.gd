@@ -13,7 +13,7 @@ signal field_exceeded
 # region public vars
 @export_group("tiles")
 @export var field_tile_width: int = 5
-@export var field_tile_height: int = 10
+@export var field_tile_height: int = 8
 @export var tile_len: float = 50
 @export var tile_scene: PackedScene
 @export var bonus_scene: PackedScene
