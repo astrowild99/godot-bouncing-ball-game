@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://blmtkbpnpl70m"]
+
+[ext_resource type="Texture2D" uid="uid://cijswtd0t0g5h" path="res://res/sprite/tile.png" id="1_5r4h2"]
+[ext_resource type="Script" path="res://script/tile.gd" id="1_327c3"]
+[ext_resource type="PhysicsMaterial" uid="uid://bj4aedlsdqwts" path="res://physics/tile.tres" id="1_q1qd4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qvp0o"]
+size = Vector2(50, 50)
+
+[node name="Tile" type="StaticBody2D"]
+physics_material_override = ExtResource("1_q1qd4")
+script = ExtResource("1_327c3")
+
+[node name="Background" type="Sprite2D" parent="."]
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("1_5r4h2")
+
+[node name="Box" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_qvp0o")
+
+[node name="MissingShots" type="Label" parent="."]
+offset_left = -20.0
+offset_top = -12.0
+offset_right = 20.0
+offset_bottom = 11.0
+horizontal_alignment = 1
+vertical_alignment = 1
