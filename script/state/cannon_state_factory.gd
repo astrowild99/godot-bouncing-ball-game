@@ -10,8 +10,10 @@ func _init(cannon: Cannon):
 	}
 
 func get_state(state_name: String) -> CannonState:
+	var state : CannonState = states.get("null")
 	if states.has(state_name):
-		return states.get(state_name)
+		state = states.get(state_name)
 	else:
 		printerr("No state ", state_name, " found")
-		return states.get("null")
+	state.on_transition()
+	return state
