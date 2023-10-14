@@ -7,6 +7,7 @@ signal field_exceeded
 
 # region scenes
 @onready var cannon: Cannon = $Cannon
+@onready var gui: Gui = $GUI
 # endregion scenes
 
 # region public vars
@@ -116,12 +117,16 @@ func _process(delta):
 func _on_cannon_shooting_done():
 	scroll_field()
 	generate_row()
+	gui.update_score(current_max)
+	gui.reset_hit()
 	current_max += 1
 
 func _on_bonus_bonus():
 	cannon.max_bullets += 1
 
-
 func _on_field_exceeded():
 	print("game over")
 	get_tree().quit()
+
+func _on_cannon_hit():
+	gui.add_hit()

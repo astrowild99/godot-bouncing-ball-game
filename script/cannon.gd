@@ -3,6 +3,7 @@ class_name Cannon
 
 # region signal
 signal shooting_done # emit when I am done with shooting and going back to idle
+signal hit # when a ball hit something
 # endregion signal
 
 # region public vars
@@ -55,6 +56,7 @@ func shoot():
 	ball.linear_velocity = Vector2(bullet_speed, 0.0).rotated(new_ball_rotation)
 	add_child(ball)
 	ball.leaving_screen.connect(_on_ball_leaving_screen)
+	ball.hit.connect(_on_ball_hit)
 
 func _process(delta):
 	state.process_input(delta)
@@ -68,4 +70,7 @@ func _on_shooting_delay_timeout():
 
 func _on_ball_leaving_screen():
 	state.on_ball_leaving_screen()
+
+func _on_ball_hit():
+	hit.emit()
 # endregion events
