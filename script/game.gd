@@ -91,7 +91,7 @@ func scroll_field():
 	for t in tiles_array:
 		if t != null:
 			var new_val = t.scroll(tile_len)
-			if new_val > field_tile_height:
+			if new_val >= field_tile_height:
 				field_exceeded.emit()
 
 func generate_walls():
