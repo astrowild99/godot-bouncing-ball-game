@@ -20,3 +20,8 @@ func on_ball_leaving_screen():
 	if (cannon.bullets_on_screen <= 0):
 		cannon.shooting_done.emit()
 		cannon.state = cannon.state_factory.get_state("idle")
+
+func process_ai_input(delta, ai_controller: CannonController):
+	if (ai_controller.reward > 0):
+		print("REWARD")
+		print(ai_controller.reward)

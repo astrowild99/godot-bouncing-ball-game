@@ -23,7 +23,7 @@ shape = SubResource("RectangleShape2D_bbib3")
 wait_time = 0.1
 one_shot = true
 
-[node name="AIController2D" type="Node2D" parent="."]
+[node name="CannonController" type="Node2D" parent="." groups=["AGENT"]]
 script = ExtResource("3_mk2ql")
 
 [connection signal="timeout" from="ShootingDelay" to="." method="_on_shooting_delay_timeout"]

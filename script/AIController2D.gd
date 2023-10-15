@@ -3,10 +3,10 @@ class_name CannonController
 # the AI agent will only give me the target angle, 
 # the game will trigger the shooting start when such angle is reached
 
-@onready var cannon: Cannon = $Cannon
+@onready var cannon: Cannon = get_tree().get_root().get_node("Game/Cannon")
 @onready var game: Game = get_tree().get_root().get_node("Game")
 
-var ai_best_angle: float = 0.0
+var ai_best_angle: float = 90
 
 func _init():
 	needs_reset = false # the game resets when the limit is reached
@@ -20,7 +20,7 @@ func get_bonus_positions():
 	var bonus_3 = Vector2(5000, 5000)
 	var positions = [bonus_1, bonus_2, bonus_3]
 	for b in game.bonus_array:
-		if pos_index > 2:
+		if pos_index > 2 || !b:
 			break
 		positions[pos_index] = to_local(b.global_position)
 		pos_index += 1
@@ -59,4 +59,5 @@ func get_action_space() -> Dictionary:
 	}
 
 func set_action(action) -> void:
-	ai_best_angle = clamp(action["cannon_angle"], 15, 165)
+	print(cannon.angle_scale)
+	ai_best_angle = (action["cannon_angle"][0] * cannon.angle_scale) + 90

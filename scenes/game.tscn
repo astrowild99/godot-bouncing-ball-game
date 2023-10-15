@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cl3t47t7iwnd5"]
+[gd_scene load_steps=9 format=3 uid="uid://cl3t47t7iwnd5"]
 
 [ext_resource type="PackedScene" uid="uid://6kbk5swfi8a7" path="res://scenes/cannon.tscn" id="1_7uibq"]
 [ext_resource type="Script" path="res://script/game.gd" id="1_y8qco"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://blmtkbpnpl70m" path="res://scenes/tile.tscn" id="3_8jol6"]
 [ext_resource type="PackedScene" uid="uid://bxqmaelxqfc8q" path="res://scenes/bonus.tscn" id="3_msvuo"]
 [ext_resource type="Script" path="res://script/GUI.gd" id="7_p4asa"]
+[ext_resource type="Script" path="res://script/AI.gd" id="8_xmyjn"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_y8qco")
@@ -35,6 +36,9 @@ text = "Hits: 0"
 [node name="Balls" type="Label" parent="GUI"]
 layout_mode = 2
 text = "Balls: 0"
+
+[node name="AI" type="Node" parent="."]
+script = ExtResource("8_xmyjn")
 
 [connection signal="field_exceeded" from="." to="." method="_on_field_exceeded"]
 [connection signal="hit" from="Cannon" to="." method="_on_cannon_hit"]

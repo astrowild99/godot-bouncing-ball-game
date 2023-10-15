@@ -12,15 +12,26 @@ signal hit # when a ball hit something
 @export var min_angle: int = 15
 @export var max_angle: int = 165
 @export var radial_speed: float = 100
+var angle_scale: float = 0.0
 
 @export_group("bullet")
 @onready var shooting_delay = $ShootingDelay
 @export var bullet_speed = 800
 
+@export_group("ai")
+@export var enable_ai: bool = true
+
 @export_group("")
 @export var max_bullets: int = 1 # gets updated when the user takes a +1 block
 @export var ball_scene: PackedScene # the ball
 # endregion public vars
+
+# region ai
+@onready var ai_controller: CannonController = $CannonController
+func update_ai_reward():
+	ai_controller.reward = max_bullets # todo move this in the ai agent
+# endregion ai
+
 # region private vars
 var state_factory: CannonStateFactory = CannonStateFactory.new(self)
 var state: CannonState
@@ -43,8 +54,10 @@ func init_state():
 	pass
 
 func _ready():
-	init_state()
 	center_cannon()
+	init_state()
+	angle_scale = (max_angle - min_angle) / 2
+	ai_controller.init(self)
 
 # endregion init
 
@@ -59,7 +72,10 @@ func shoot():
 	ball.hit.connect(_on_ball_hit)
 
 func _process(delta):
-	state.process_input(delta)
+	if (!enable_ai):
+		state.process_input(delta)
+	else:
+		state.process_ai_input(delta, ai_controller)
 	state.on_process(delta)
 
 # endregion process
