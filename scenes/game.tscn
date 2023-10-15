@@ -44,7 +44,6 @@ text = "Balls: 0"
 
 [node name="AI" type="Node" parent="."]
 script = ExtResource("8_xmyjn")
-speed_up = 8
 
 [node name="BonusKiller" type="Area2D" parent="."]
 collision_layer = 0
