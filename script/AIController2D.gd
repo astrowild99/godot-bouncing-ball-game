@@ -37,7 +37,7 @@ func get_obs() -> Dictionary:
 	var positions = get_bonus_positions()
 	var current_rotation = cannon.rotation_degrees
 	positions.append(abs(current_rotation))
-	return {"obs": [current_rotation]}
+	return {"obs": positions}
 
 func get_reward() -> float:
 	return reward
