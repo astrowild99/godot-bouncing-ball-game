@@ -3,6 +3,7 @@ class_name Game
 
 # region signal
 signal field_exceeded
+signal field_cleared
 # endregion signal
 
 # region scenes
@@ -49,7 +50,7 @@ func generate_row():
 	for n in range(0, field_tile_width):
 		# first I check for the probability
 		var randn = randi()
-		if (randn % bonus_probability == 0):
+		if (randn % bonus_probability == 0 || cannon.ai_debug):
 			arr.append(0)
 			bonus_arr.append(1)
 		elif (randn % holes_probability == 0):
@@ -100,6 +101,14 @@ func scroll_field():
 		if b != null:
 			var new_bon = b.scroll(tile_len)
 
+func clear_field():
+	for t in tiles_array:
+		if t != null and weakref(t).get_ref():
+			t.queue_free()
+	for b in bonus_array:
+		if b != null and weakref(b).get_ref():
+			b.queue_free()
+
 func generate_walls():
 	var top_wall: Wall = wall_scene.instantiate()
 	top_wall.position.y = field_top_height - (1.5 * tile_len)
@@ -128,7 +137,16 @@ func _ready():
 func _process(delta):
 	pass
 
+func check_field_cleared():
+	var clear_empty: bool = true
+	for t in tiles_array:
+		if t != null && weakref(t).get_ref(): clear_empty = false
+	for b in bonus_array:
+		if b != null && weakref(b).get_ref(): clear_empty = false
+	if clear_empty: field_cleared.emit()
+
 func _on_cannon_shooting_done():
+	check_field_cleared()
 	scroll_field()
 	generate_row()
 	gui.update_score(current_max)
@@ -145,3 +163,11 @@ func _on_field_exceeded():
 
 func _on_cannon_hit():
 	gui.add_hit()
+
+func _on_field_cleared():
+	print("field cleared!")
+
+func _on_bonus_killer_area_entered(area):
+	if area && area is Bonus:
+		area.queue_free()
+	clear_field()

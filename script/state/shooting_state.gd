@@ -2,6 +2,7 @@ extends CannonState
 class_name ShootingCannonState
 
 func on_transition():
+	cannon.prev_max_bullets = cannon.max_bullets
 	if (cannon.ai_debug):
 		cannon.bullets = 1
 		cannon.bullets_on_screen = 1

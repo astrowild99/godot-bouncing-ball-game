@@ -94,6 +94,8 @@ func communicate_with_ai():
 				"reward": reward,
 				"done": done
 			}
+			print("--- reply ---")
+			print(reply)
 			_send_dict_as_json_message(reply)
 		
 		var handled = handle_message()
@@ -174,14 +176,14 @@ func _send_dict_as_json_message(dict):
 func _send_env_info():
 	var json_dict = _get_dict_json_message()
 	assert(json_dict["type"] == "env_info")
-
-		
 	var message = {
 		"type" : "env_info",
 		"observation_space": _obs_space,
 		"action_space":_action_space,
 		"n_agents": len(agents)
-		}
+	}
+	print("--- env info ---")
+	print(message)
 	_send_dict_as_json_message(message)
 
 func connect_to_server():

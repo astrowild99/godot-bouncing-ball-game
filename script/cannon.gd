@@ -26,8 +26,11 @@ var angle_scale: float = 0.0
 
 # region ai
 @onready var ai_controller: CannonController = $CannonController
-func update_ai_reward():
-	ai_controller.reward = max_bullets # todo move this in the ai agent
+var prev_max_bullets: int = 0 # updated via the state transitions
+func update_ai_reward(p_reward: float):
+	print("--- reward ---")
+	print(p_reward)
+	ai_controller.reward = p_reward # todo move this in the ai agent
 # endregion ai
 
 # region private vars
@@ -88,3 +91,10 @@ func _on_ball_leaving_screen():
 func _on_ball_hit():
 	hit.emit()
 # endregion events
+
+
+func _on_bonus_killer_area_entered(area):
+	ai_controller.done = true
+	ai_controller.needs_reset = true
+	max_bullets = 0
+	prev_max_bullets = 0

@@ -13,17 +13,16 @@ func _init():
 
 # region observations
 func get_bonus_positions():
-	# empty bonus positions are in the far right, behind
-	var pos_index = 0
-	var bonus_1 = Vector2(5000, 5000)
-	var bonus_2 = Vector2(5000, 5000)
-	var bonus_3 = Vector2(5000, 5000)
-	var positions = [bonus_1, bonus_2, bonus_3]
+	var positions = [] # a bool matrix of found bonus
+	for i in range(0, game.field_tile_width * game.field_tile_height):
+		positions.append(0)
 	for b in game.bonus_array:
-		if pos_index > 2 || !b:
-			break
-		positions[pos_index] = to_local(b.global_position)
-		pos_index += 1
+		if (!b):
+			continue
+		var index = b.field_position_x + (b.field_position_y * game.field_tile_width)
+		if index >= game.field_tile_height * game.field_tile_width:
+			continue # here I have exceeeded the row
+		positions[index] = 1
 	return positions
 # endregion observations
 
@@ -34,18 +33,11 @@ func get_bonus_positions():
 # - the position of the first 3 rewards, just to avoid having a huge network
 func get_obs() -> Dictionary:
 	# I start with the very dumb observations first, trying to maximize the reach 
-	# for the first 3 bonus
-	var balls = cannon.max_bullets
+	# for the bonuses
 	var positions = get_bonus_positions()
-	return {"obs": [
-		balls,
-		positions[0].x,
-		positions[0].y,
-		positions[1].x,
-		positions[1].y,
-		positions[2].x,
-		positions[2].y
-	]}
+	var current_rotation = cannon.rotation_degrees
+	positions.append(abs(current_rotation))
+	return {"obs": [current_rotation]}
 
 func get_reward() -> float:
 	return reward
