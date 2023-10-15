@@ -28,6 +28,7 @@ signal field_exceeded
 # region private vars
 var current_max = 1 # starts at one, increases at every new round
 var tiles_array = []
+var bonus_array = [] # only filled with those having the bonus
 
 var field_top_height: int
 # endregion private vars
@@ -84,7 +85,7 @@ func generate_row():
 			add_child(bonus_tile) 
 			bonus_tile.init(m, 0)
 			bonus_tile.bonus.connect(_on_bonus_bonus)
-			tiles_array.append(bonus_tile)
+			bonus_array.append(bonus_tile)
 
 # scrolls down the field by one
 func scroll_field():
@@ -93,6 +94,9 @@ func scroll_field():
 			var new_val = t.scroll(tile_len)
 			if new_val >= field_tile_height:
 				field_exceeded.emit()
+	for b in bonus_array:
+		if b != null:
+			var new_bon = b.scroll(tile_len)
 
 func generate_walls():
 	var top_wall: Wall = wall_scene.instantiate()
