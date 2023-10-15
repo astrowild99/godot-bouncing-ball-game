@@ -94,8 +94,6 @@ func communicate_with_ai():
 				"reward": reward,
 				"done": done
 			}
-			print("--- reply ---")
-			print(reply)
 			_send_dict_as_json_message(reply)
 		
 		var handled = handle_message()
@@ -334,5 +332,4 @@ func clamp_array(arr : Array, min:float, max:float):
 
 # I communicate with the agent only when the shooting is done
 func _on_cannon_shooting_done():
-	print("--- shooting done ---")
 	communicate_with_ai()

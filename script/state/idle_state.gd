@@ -4,9 +4,7 @@ class_name IdleCannonState
 func on_transition():
 	# when I get back to idle, it means that I survived, hence I should
 	# reward my agent
-	print("--- back to idle --- " + str(cannon.max_bullets) + " - " + str(cannon.prev_max_bullets))
 	cannon.update_ai_reward()
-	print("--- updated my rewards ---")
 
 func process_input(delta):
 	var expected_rotation = cannon.rotation_degrees
@@ -26,5 +24,4 @@ func process_ai_input(delta, ai_controller: CannonController):
 	var movement = ai_controller.ai_best_angle
 	cannon.rotation_degrees = -movement
 	cannon.state = cannon.state_factory.get_state("shooting")
-	print(movement)
-	pass
+	print("output: " + str(movement))
