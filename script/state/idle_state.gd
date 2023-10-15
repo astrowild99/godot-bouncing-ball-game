@@ -5,7 +5,7 @@ func on_transition():
 	# when I get back to idle, it means that I survived, hence I should
 	# reward my agent
 	print("--- back to idle --- " + str(cannon.max_bullets) + " - " + str(cannon.prev_max_bullets))
-	cannon.update_ai_reward((float(cannon.max_bullets) - float(cannon.prev_max_bullets)) / 8)
+	cannon.update_ai_reward()
 
 func process_input(delta):
 	var expected_rotation = cannon.rotation_degrees

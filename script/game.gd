@@ -158,8 +158,12 @@ func _on_bonus_bonus():
 	cannon.max_bullets += 1
 
 func _on_field_exceeded():
-	print("game over")
-	get_tree().quit()
+	clear_field()
+	current_max = 1
+	cannon.max_bullets = 1
+	cannon.prev_max_bullets = 1
+	cannon.ai_controller.done = true
+	cannon.ai_controller.needs_reset = true
 
 func _on_cannon_hit():
 	gui.add_hit()
@@ -170,4 +174,3 @@ func _on_field_cleared():
 func _on_bonus_killer_area_entered(area):
 	if area && area is Bonus:
 		area.queue_free()
-	clear_field()

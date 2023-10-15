@@ -17,13 +17,10 @@ script = ExtResource("1_y8qco")
 tile_scene = ExtResource("3_8jol6")
 bonus_scene = ExtResource("3_msvuo")
 wall_scene = ExtResource("3_3wdfm")
-holes_probability = 1
-bonus_probability = 2
 
 [node name="Cannon" parent="." instance=ExtResource("1_7uibq")]
 position = Vector2(578, 630)
 ball_scene = ExtResource("2_tytcf")
-ai_debug = true
 metadata/_edit_group_ = true
 
 [node name="GUI" type="VBoxContainer" parent="."]
@@ -45,7 +42,6 @@ text = "Balls: 0"
 
 [node name="AI" type="Node" parent="."]
 script = ExtResource("8_xmyjn")
-speed_up = 8
 
 [node name="BonusKiller" type="Area2D" parent="."]
 collision_layer = 0
