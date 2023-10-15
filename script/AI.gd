@@ -20,7 +20,6 @@ var args = null
 var initialized = false
 var just_reset = false
 var onnx_model = null
-var n_action_steps = 0
 
 var _action_space : Dictionary
 var _obs_space : Dictionary
@@ -59,16 +58,13 @@ func _initialize():
 	_set_action_repeat()
 	initialized = true  
 
-func _physics_process(delta): 
-	# two modes, human control, agent control
-	# pause tree, send obs, get actions, set actions, unpause tree
-	if n_action_steps % action_repeat != 0:
-		n_action_steps += 1
-		return
+func _physics_process(delta):
+	pass
 
-	n_action_steps += 1
-	
+# instead of calling every physics frame, I do so every time it is my turn
+func communicate_with_ai():
 	if connected:
+		print("communication with ai")
 		get_tree().set_pause(true) 
 		
 		if just_reset:
@@ -115,10 +111,11 @@ func _physics_process(delta):
 		_set_agent_actions(actions) 
 		need_to_send_obs = true
 		get_tree().set_pause(false) 
-		_reset_agents_if_done()	
+		_reset_agents_if_done()
 		
 	else:
-		_reset_agents_if_done()	
+		print("it is not connected?!?!")
+		_reset_agents_if_done()
 
 func _extract_action_dict(action_array: Array):
 	var index = 0
@@ -236,8 +233,6 @@ func _set_action_repeat():
 func disconnect_from_server():
 	stream.disconnect_from_host()
 
-
-
 func handle_message() -> bool:
 	# get json message: reset, step, close
 	var message = _get_dict_json_message()
@@ -275,6 +270,7 @@ func handle_message() -> bool:
 		return handle_message()
 	
 	if message["type"] == "action":
+		print("received message")
 		var action = message["action"]
 		_set_agent_actions(action) 
 		need_to_send_obs = true
@@ -333,3 +329,8 @@ func clamp_array(arr : Array, min:float, max:float):
 	for a in arr:
 		output.append(clamp(a, min, max))
 	return output
+
+# I communicate with the agent only when the shooting is done
+func _on_cannon_shooting_done():
+	print("--- shooting done ---")
+	communicate_with_ai()

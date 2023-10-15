@@ -14,10 +14,13 @@ script = ExtResource("1_y8qco")
 tile_scene = ExtResource("3_8jol6")
 bonus_scene = ExtResource("3_msvuo")
 wall_scene = ExtResource("3_3wdfm")
+holes_probability = 1
+bonus_probability = 2
 
 [node name="Cannon" parent="." instance=ExtResource("1_7uibq")]
 position = Vector2(578, 630)
 ball_scene = ExtResource("2_tytcf")
+ai_debug = true
 metadata/_edit_group_ = true
 
 [node name="GUI" type="VBoxContainer" parent="."]
@@ -43,3 +46,4 @@ script = ExtResource("8_xmyjn")
 [connection signal="field_exceeded" from="." to="." method="_on_field_exceeded"]
 [connection signal="hit" from="Cannon" to="." method="_on_cannon_hit"]
 [connection signal="shooting_done" from="Cannon" to="." method="_on_cannon_shooting_done"]
+[connection signal="shooting_done" from="Cannon" to="AI" method="_on_cannon_shooting_done"]

@@ -59,5 +59,8 @@ func get_action_space() -> Dictionary:
 	}
 
 func set_action(action) -> void:
-	print(cannon.angle_scale)
 	ai_best_angle = (action["cannon_angle"][0] * cannon.angle_scale) + 90
+
+# overriding to avoid reset for now
+func _physics_process(delta):
+	pass

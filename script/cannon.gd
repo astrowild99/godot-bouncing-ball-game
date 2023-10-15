@@ -18,12 +18,10 @@ var angle_scale: float = 0.0
 @onready var shooting_delay = $ShootingDelay
 @export var bullet_speed = 800
 
-@export_group("ai")
-@export var enable_ai: bool = true
-
 @export_group("")
 @export var max_bullets: int = 1 # gets updated when the user takes a +1 block
 @export var ball_scene: PackedScene # the ball
+@export var ai_debug: bool = false
 # endregion public vars
 
 # region ai
@@ -72,7 +70,7 @@ func shoot():
 	ball.hit.connect(_on_ball_hit)
 
 func _process(delta):
-	if (!enable_ai):
+	if (!ai_controller || ai_controller.heuristic == "human"):
 		state.process_input(delta)
 	else:
 		state.process_ai_input(delta, ai_controller)

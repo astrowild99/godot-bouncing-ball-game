@@ -48,23 +48,25 @@ func generate_row():
 	var bonus_arr = []
 	for n in range(0, field_tile_width):
 		# first I check for the probability
-		if (randi() % holes_probability == 0):
-			arr.append(0)
-			bonus_arr.append(0)
-		elif (randi() % bonus_probability == 0):
+		var randn = randi()
+		if (randn % bonus_probability == 0):
 			arr.append(0)
 			bonus_arr.append(1)
+		elif (randn % holes_probability == 0):
+			arr.append(0)
+			bonus_arr.append(0)
 		else:
 			# here I randomly pick the difference from the current max
 			var random_delta = randi() % value_range
-			var negative = randi() % 2 == 0
+			var negative = randn % 2 == 0
 			if negative:
 				arr.append(current_max - random_delta)
 			else:
 				arr.append(current_max + random_delta) 
 			bonus_arr.append(0)
 	
-	check_generated_row_is_not_empty(arr)
+	if !cannon.ai_debug:
+		check_generated_row_is_not_empty(arr)
 	
 	# then I handle the distance
 	var center = Vector2(cannon.position.x, field_top_height)
@@ -118,7 +120,8 @@ func generate_walls():
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	field_top_height = cannon.position.y - (tile_len * field_tile_height)
-	generate_walls()
+	if (!cannon.ai_debug):
+		generate_walls()
 	generate_row()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
