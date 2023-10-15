@@ -24,6 +24,19 @@ func get_bonus_positions():
 			continue # here I have exceeeded the row
 		positions[index] = 1
 	return positions
+
+func get_tile_positions():
+	var positions = []
+	for i in range(0, game.field_tile_width * game.field_tile_height):
+		positions.append(0)
+	for t in game.tiles_array:
+		if (!t):
+			continue
+		var index = t.field_position_x + (t.field_position_y * game.field_tile_width)
+		if index >= game.field_tile_height * game.field_tile_width:
+			continue
+		positions[index] = t.missing_shots
+	return positions
 # endregion observations
 
 # the observations for the game are:
@@ -34,9 +47,15 @@ func get_bonus_positions():
 func get_obs() -> Dictionary:
 	# I start with the very dumb observations first, trying to maximize the reach 
 	# for the bonuses
-	var positions = get_bonus_positions()
+	var positions = []
+	var tile_positions = get_tile_positions()
+	var bonus_positions = get_bonus_positions()
 	var current_rotation = cannon.rotation_degrees
 	positions.append(abs(current_rotation))
+	for t in tile_positions:
+		positions.append(t)
+	for b in bonus_positions:
+		positions.append(b)
 	return {"obs": positions}
 
 func get_reward() -> float:

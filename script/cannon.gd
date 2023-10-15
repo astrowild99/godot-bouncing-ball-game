@@ -18,6 +18,10 @@ var angle_scale: float = 0.0
 @onready var shooting_delay = $ShootingDelay
 @export var bullet_speed = 800
 
+@export_group("ai")
+@export var bonus_ratio: float = 8.0
+@export var hit_ratio: float = 5.0
+
 @export_group("")
 @export var max_bullets: int = 1 # gets updated when the user takes a +1 block
 @export var ball_scene: PackedScene # the ball
@@ -27,10 +31,13 @@ var angle_scale: float = 0.0
 # region ai
 @onready var ai_controller: CannonController = $CannonController
 var prev_max_bullets: int = 0 # updated via the state transitions
+var current_hits: int = 0 # updated via the state transitions
 
 func update_ai_reward():
-	var new_ball_reward = (float(max_bullets) - float(prev_max_bullets)) / 8
-	ai_controller.reward = new_ball_reward # todo move this in the ai agent
+	var new_ball_reward = (float(max_bullets) - float(prev_max_bullets)) / bonus_ratio
+	var tile_reward = float(current_hits) / (hit_ratio * float(prev_max_bullets)) # using this to align with the current scores
+	ai_controller.reward = new_ball_reward + tile_reward # todo move this in the ai agent
+	print("reward: " + str(ai_controller.reward))
 # endregion ai
 
 # region private vars
@@ -89,6 +96,7 @@ func _on_ball_leaving_screen():
 	state.on_ball_leaving_screen()
 
 func _on_ball_hit():
+	current_hits += 1
 	hit.emit()
 # endregion events
 

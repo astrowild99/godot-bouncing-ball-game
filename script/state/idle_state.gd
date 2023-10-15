@@ -6,6 +6,7 @@ func on_transition():
 	# reward my agent
 	print("--- back to idle --- " + str(cannon.max_bullets) + " - " + str(cannon.prev_max_bullets))
 	cannon.update_ai_reward()
+	print("--- updated my rewards ---")
 
 func process_input(delta):
 	var expected_rotation = cannon.rotation_degrees

@@ -3,6 +3,7 @@ class_name ShootingCannonState
 
 func on_transition():
 	cannon.prev_max_bullets = cannon.max_bullets
+	cannon.current_hits = 0
 	print("--- shooting --- " + str(cannon.prev_max_bullets))
 	if (cannon.ai_debug):
 		cannon.bullets = 1
