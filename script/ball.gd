@@ -24,4 +24,6 @@ func _on_body_entered(body):
 
 func _on_infinite_bounce_timeout_timeout():
 	print("MUAHAHAH")
-	linear_velocity.y += 200
+	leaving_screen.emit()
+	$InfiniteBounceTimeout.stop()
+	queue_free()
