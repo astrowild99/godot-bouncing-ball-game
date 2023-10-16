@@ -17,8 +17,6 @@ script = ExtResource("1_y8qco")
 tile_scene = ExtResource("3_8jol6")
 bonus_scene = ExtResource("3_msvuo")
 wall_scene = ExtResource("3_3wdfm")
-holes_probability = 5
-bonus_probability = 6
 
 [node name="Cannon" parent="." instance=ExtResource("1_7uibq")]
 position = Vector2(578, 630)
@@ -54,6 +52,7 @@ position = Vector2(577.5, 611)
 shape = SubResource("RectangleShape2D_638lc")
 
 [connection signal="field_cleared" from="." to="." method="_on_field_cleared"]
+[connection signal="field_cleared" from="." to="Cannon" method="_on_game_field_cleared"]
 [connection signal="field_exceeded" from="." to="." method="_on_field_exceeded"]
 [connection signal="hit" from="Cannon" to="." method="_on_cannon_hit"]
 [connection signal="shooting_done" from="Cannon" to="." method="_on_cannon_shooting_done"]

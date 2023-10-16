@@ -22,8 +22,8 @@ signal field_cleared
 
 @export_group("difficulty")
 @export var value_range: int = 2 # how much more - less can the new numbers be related to the current max
-@export var holes_probability: int = 2 # the fraction of probability, 1 is 1/2 and so on
-@export var bonus_probability: int = 3 # one over 3 should be 
+@export var holes_probability: int = 5 # the fraction of probability, 1 is 1/2 and so on
+@export var bonus_probability: int = 4 # one over 3 should be 
 # endregion public vars
 
 # region private vars
@@ -80,6 +80,7 @@ func generate_row():
 			tile.position.x = limit_left.x + (m * tile_len)
 			add_child(tile)
 			tile.init(arr[m], m, 0)
+			tile.destroyed.connect(cannon._on_tile_destroyed)
 			tiles_array.append(tile)
 		elif (bonus_arr[m] > 0):
 			var bonus_tile: Bonus = bonus_scene.instantiate()
@@ -137,12 +138,14 @@ func _ready():
 func _process(delta):
 	pass
 
-func check_field_cleared():
+func is_field_cleared() -> bool:
 	var clear_empty: bool = true
 	for t in tiles_array:
 		if t != null && weakref(t).get_ref(): clear_empty = false
-	for b in bonus_array:
-		if b != null && weakref(b).get_ref(): clear_empty = false
+	return clear_empty
+
+func check_field_cleared():
+	var clear_empty = is_field_cleared()
 	if clear_empty: field_cleared.emit()
 
 func _on_cannon_shooting_done():

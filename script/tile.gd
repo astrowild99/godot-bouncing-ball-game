@@ -1,6 +1,10 @@
 extends StaticBody2D
 class_name Tile
 
+# region signal
+signal destroyed
+# endregion signal
+
 @onready var missing_shot_scene: Label = $MissingShots
 
 # region public vars
@@ -41,4 +45,5 @@ func on_hit():
 	missing_shots -= 1
 	print_missing_shots()
 	if (missing_shots <= 0):
+		destroyed.emit()
 		queue_free()

@@ -21,6 +21,8 @@ var angle_scale: float = 0.0
 @export_group("ai")
 @export var bonus_ratio: float = 8.0
 @export var hit_ratio: float = 5.0
+@export var destroyed_ratio: float = 10.0
+@export var clear_ratio: float = 1000.0
 
 @export_group("")
 @export var max_bullets: int = 1 # gets updated when the user takes a +1 block
@@ -32,11 +34,15 @@ var angle_scale: float = 0.0
 @onready var ai_controller: CannonController = $CannonController
 var prev_max_bullets: int = 0 # updated via the state transitions
 var current_hits: int = 0 # updated via the state transitions
+var current_destroyed: int = 0 # updated via the state transition
+var is_field_cleared: bool = false
 
 func update_ai_reward():
-	var new_ball_reward = (float(max_bullets) - float(prev_max_bullets)) / bonus_ratio
-	var tile_reward = float(current_hits) / (hit_ratio * float(prev_max_bullets)) # using this to align with the current scores
-	ai_controller.reward = new_ball_reward + tile_reward # todo move this in the ai agent
+	var new_ball_reward = (float(max_bullets) - float(prev_max_bullets)) * bonus_ratio
+	var tile_reward = float(current_hits) * float(hit_ratio) # using this to align with the current scores
+	var destroy_reward = float(current_destroyed) * float(destroyed_ratio)
+	var clear_reward = 0 if !is_field_cleared else clear_ratio
+	ai_controller.reward = new_ball_reward + tile_reward + destroy_reward + clear_reward # todo move this in the ai agent
 	print("reward: " + str(ai_controller.reward))
 # endregion ai
 
@@ -98,8 +104,15 @@ func _on_ball_leaving_screen():
 func _on_ball_hit():
 	current_hits += 1
 	hit.emit()
+
+func _on_tile_destroyed():
+	current_destroyed += 1
 # endregion events
 
 
 func _on_bonus_killer_area_entered(area):
 	pass
+
+func _on_game_field_cleared():
+	print("i read it bro")
+	is_field_cleared = true

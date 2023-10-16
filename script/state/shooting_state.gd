@@ -2,8 +2,12 @@ extends CannonState
 class_name ShootingCannonState
 
 func on_transition():
+	# reset ai bonus
 	cannon.prev_max_bullets = cannon.max_bullets
 	cannon.current_hits = 0
+	cannon.current_destroyed = 0
+	cannon.is_field_cleared = false
+	
 	print("--- shooting --- " + str(cannon.prev_max_bullets))
 	if (cannon.ai_debug):
 		cannon.bullets = 1
