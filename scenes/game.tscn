@@ -54,6 +54,7 @@ shape = SubResource("RectangleShape2D_638lc")
 [connection signal="field_cleared" from="." to="." method="_on_field_cleared"]
 [connection signal="field_cleared" from="." to="Cannon" method="_on_game_field_cleared"]
 [connection signal="field_exceeded" from="." to="." method="_on_field_exceeded"]
+[connection signal="field_exceeded" from="." to="Cannon" method="_on_game_field_exceeded"]
 [connection signal="hit" from="Cannon" to="." method="_on_cannon_hit"]
 [connection signal="shooting_done" from="Cannon" to="." method="_on_cannon_shooting_done"]
 [connection signal="shooting_done" from="Cannon" to="AI" method="_on_cannon_shooting_done"]
