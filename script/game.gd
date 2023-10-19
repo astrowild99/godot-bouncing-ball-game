@@ -23,7 +23,7 @@ signal field_cleared
 @export_group("difficulty")
 @export var value_range: int = 2 # how much more - less can the new numbers be related to the current max
 @export var holes_probability: int = 4 # the fraction of probability, 1 is 1/2 and so on
-@export var bonus_probability: int = 3 # one over 3 should be 
+@export var bonus_probability: int = 2 # one over 3 should be 
 @export var max_bonus_per_line: int = 2
 # endregion public vars
 
