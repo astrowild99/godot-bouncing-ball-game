@@ -22,8 +22,9 @@ signal field_cleared
 
 @export_group("difficulty")
 @export var value_range: int = 2 # how much more - less can the new numbers be related to the current max
-@export var holes_probability: int = 5 # the fraction of probability, 1 is 1/2 and so on
-@export var bonus_probability: int = 4 # one over 3 should be 
+@export var holes_probability: int = 4 # the fraction of probability, 1 is 1/2 and so on
+@export var bonus_probability: int = 3 # one over 3 should be 
+@export var max_bonus_per_line: int = 2
 # endregion public vars
 
 # region private vars
@@ -48,18 +49,17 @@ func generate_row():
 	var arr = []
 	var bonus_arr = []
 	for n in range(0, field_tile_width):
-		# first I check for the probability
-		var randn = randi()
-		if (randn % bonus_probability == 0 || cannon.ai_debug):
+		# making the game more difficult by only giving at most 2 bonus per line
+		if ((randi() % bonus_probability == 0 && bonus_arr.size() < max_bonus_per_line) || cannon.ai_debug):
 			arr.append(0)
 			bonus_arr.append(1)
-		elif (randn % holes_probability == 0):
+		elif (randi() % holes_probability == 0):
 			arr.append(0)
 			bonus_arr.append(0)
 		else:
 			# here I randomly pick the difference from the current max
 			var random_delta = randi() % value_range
-			var negative = randn % 2 == 0
+			var negative = randi() % 2 == 0
 			if negative:
 				arr.append(current_max - random_delta)
 			else:
