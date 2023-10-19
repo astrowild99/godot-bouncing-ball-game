@@ -51,14 +51,18 @@ func get_obs() -> Dictionary:
 	var tile_positions = get_tile_positions()
 	var bonus_positions = get_bonus_positions()
 	var current_rotation = cannon.rotation_degrees
-	positions.append(abs(current_rotation))
+	# positions.append(abs(current_rotation))
 	for t in tile_positions:
 		positions.append(t)
 	for b in bonus_positions:
 		positions.append(b)
+	print("getting obs")
+	print(positions)
 	return {"obs": positions}
 
 func get_reward() -> float:
+	print("getting rewards")
+	print(reward)
 	return reward
 
 func get_action_space() -> Dictionary:
