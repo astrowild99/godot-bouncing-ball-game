@@ -2,7 +2,9 @@ extends CannonState
 class_name IdleCannonState
 
 func on_transition():
-	print("idle")
+	# when I get back to idle, it means that I survived, hence I should
+	# reward my agent
+	cannon.update_ai_reward()
 
 func process_input(delta):
 	var expected_rotation = cannon.rotation_degrees
@@ -15,3 +17,11 @@ func process_input(delta):
 	
 	if (abs(expected_rotation) < cannon.max_angle && abs(expected_rotation) > cannon.min_angle):
 		cannon.rotation_degrees = expected_rotation
+
+func process_ai_input(delta, ai_controller: CannonController):
+	# the ai input is handled by first reaching the angle
+	# and then shooting, directly
+	var movement = ai_controller.ai_best_angle
+	cannon.rotation_degrees = -movement
+	cannon.state = cannon.state_factory.get_state("shooting")
+	print("output: " + str(movement))

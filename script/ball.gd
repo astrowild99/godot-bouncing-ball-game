@@ -20,3 +20,10 @@ func _on_body_entered(body):
 	if (body is Tile):
 		hit.emit()
 		body.on_hit()
+
+
+func _on_infinite_bounce_timeout_timeout():
+	print("MUAHAHAH")
+	leaving_screen.emit()
+	$InfiniteBounceTimeout.stop()
+	queue_free()

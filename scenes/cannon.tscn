@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://6kbk5swfi8a7"]
+[gd_scene load_steps=5 format=3 uid="uid://6kbk5swfi8a7"]
 
 [ext_resource type="Texture2D" uid="uid://c3y8fe6tufxy2" path="res://res/sprite/cannon.png" id="1_701d4"]
 [ext_resource type="Script" path="res://script/cannon.gd" id="1_aqtmt"]
+[ext_resource type="Script" path="res://script/AIController2D.gd" id="3_mk2ql"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bbib3"]
 size = Vector2(58, 4)
@@ -21,5 +22,8 @@ shape = SubResource("RectangleShape2D_bbib3")
 [node name="ShootingDelay" type="Timer" parent="."]
 wait_time = 0.1
 one_shot = true
+
+[node name="CannonController" type="Node2D" parent="." groups=["AGENT"]]
+script = ExtResource("3_mk2ql")
 
 [connection signal="timeout" from="ShootingDelay" to="." method="_on_shooting_delay_timeout"]

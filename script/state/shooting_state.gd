@@ -2,9 +2,19 @@ extends CannonState
 class_name ShootingCannonState
 
 func on_transition():
-	print("shooting")
-	cannon.bullets = cannon.max_bullets
-	cannon.bullets_on_screen = cannon.max_bullets
+	# reset ai bonus
+	cannon.prev_max_bullets = cannon.max_bullets
+	cannon.current_hits = 0
+	cannon.current_destroyed = 0
+	cannon.is_field_cleared = false
+	
+	print("--- shooting --- " + str(cannon.prev_max_bullets))
+	if (cannon.ai_debug):
+		cannon.bullets = 1
+		cannon.bullets_on_screen = 1
+	else:
+		cannon.bullets = cannon.max_bullets
+		cannon.bullets_on_screen = cannon.max_bullets
 	cannon.shooting_delay.start()
 
 func on_shooting_delay_timeout():
@@ -20,3 +30,6 @@ func on_ball_leaving_screen():
 	if (cannon.bullets_on_screen <= 0):
 		cannon.shooting_done.emit()
 		cannon.state = cannon.state_factory.get_state("idle")
+
+func process_ai_input(delta, ai_controller: CannonController):
+	pass

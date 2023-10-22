@@ -26,4 +26,6 @@ func on_ball_leaving_screen():
 # region inputs
 func process_input(delta):
 	pass
+func process_ai_input(delta, ai_controller: CannonController):
+	pass
 # endregion inputs

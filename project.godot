@@ -12,12 +12,21 @@ config_version=5
 
 config/name="BallClearGame"
 run/main_scene="res://scenes/game.tscn"
-config/features=PackedStringArray("4.1", "Mobile")
+config/features=PackedStringArray("4.1", "C#", "Mobile")
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=400
+window/size/viewport_height=600
 
 [dotnet]
 
 project/assembly_name="BallClearGame"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_rl_agents/plugin.cfg")
 
 [input]
 

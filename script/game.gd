@@ -3,6 +3,7 @@ class_name Game
 
 # region signal
 signal field_exceeded
+signal field_cleared
 # endregion signal
 
 # region scenes
@@ -21,13 +22,15 @@ signal field_exceeded
 
 @export_group("difficulty")
 @export var value_range: int = 2 # how much more - less can the new numbers be related to the current max
-@export var holes_probability: int = 2 # the fraction of probability, 1 is 1/2 and so on
-@export var bonus_probability: int = 3 # one over 3 should be 
+@export var holes_probability: int = 4 # the fraction of probability, 1 is 1/2 and so on
+@export var bonus_probability: int = 2 # one over 3 should be 
+@export var max_bonus_per_line: int = 2
 # endregion public vars
 
 # region private vars
 var current_max = 1 # starts at one, increases at every new round
 var tiles_array = []
+var bonus_array = [] # only filled with those having the bonus
 
 var field_top_height: int
 # endregion private vars
@@ -46,13 +49,13 @@ func generate_row():
 	var arr = []
 	var bonus_arr = []
 	for n in range(0, field_tile_width):
-		# first I check for the probability
-		if (randi() % holes_probability == 0):
-			arr.append(0)
-			bonus_arr.append(0)
-		elif (randi() % bonus_probability == 0):
+		# making the game more difficult by only giving at most 2 bonus per line
+		if ((randi() % bonus_probability == 0 && bonus_arr.size() < max_bonus_per_line) || cannon.ai_debug):
 			arr.append(0)
 			bonus_arr.append(1)
+		elif (randi() % holes_probability == 0):
+			arr.append(0)
+			bonus_arr.append(0)
 		else:
 			# here I randomly pick the difference from the current max
 			var random_delta = randi() % value_range
@@ -63,7 +66,8 @@ func generate_row():
 				arr.append(current_max + random_delta) 
 			bonus_arr.append(0)
 	
-	check_generated_row_is_not_empty(arr)
+	if !cannon.ai_debug:
+		check_generated_row_is_not_empty(arr)
 	
 	# then I handle the distance
 	var center = Vector2(cannon.position.x, field_top_height)
@@ -76,6 +80,7 @@ func generate_row():
 			tile.position.x = limit_left.x + (m * tile_len)
 			add_child(tile)
 			tile.init(arr[m], m, 0)
+			tile.destroyed.connect(cannon._on_tile_destroyed)
 			tiles_array.append(tile)
 		elif (bonus_arr[m] > 0):
 			var bonus_tile: Bonus = bonus_scene.instantiate()
@@ -84,15 +89,26 @@ func generate_row():
 			add_child(bonus_tile) 
 			bonus_tile.init(m, 0)
 			bonus_tile.bonus.connect(_on_bonus_bonus)
-			tiles_array.append(bonus_tile)
+			bonus_array.append(bonus_tile)
 
 # scrolls down the field by one
 func scroll_field():
 	for t in tiles_array:
 		if t != null:
 			var new_val = t.scroll(tile_len)
-			if new_val > field_tile_height:
+			if new_val >= field_tile_height:
 				field_exceeded.emit()
+	for b in bonus_array:
+		if b != null:
+			var new_bon = b.scroll(tile_len)
+
+func clear_field():
+	for t in tiles_array:
+		if t != null and weakref(t).get_ref():
+			t.queue_free()
+	for b in bonus_array:
+		if b != null and weakref(b).get_ref():
+			b.queue_free()
 
 func generate_walls():
 	var top_wall: Wall = wall_scene.instantiate()
@@ -114,14 +130,26 @@ func generate_walls():
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	field_top_height = cannon.position.y - (tile_len * field_tile_height)
-	generate_walls()
+	if (!cannon.ai_debug):
+		generate_walls()
 	generate_row()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 
+func is_field_cleared() -> bool:
+	var clear_empty: bool = true
+	for t in tiles_array:
+		if t != null && weakref(t).get_ref(): clear_empty = false
+	return clear_empty
+
+func check_field_cleared():
+	var clear_empty = is_field_cleared()
+	if clear_empty: field_cleared.emit()
+
 func _on_cannon_shooting_done():
+	check_field_cleared()
 	scroll_field()
 	generate_row()
 	gui.update_score(current_max)
@@ -133,8 +161,19 @@ func _on_bonus_bonus():
 	cannon.max_bullets += 1
 
 func _on_field_exceeded():
-	print("game over")
-	get_tree().quit()
+	clear_field()
+	current_max = 1
+	cannon.max_bullets = 1
+	cannon.prev_max_bullets = 1
+	cannon.ai_controller.done = true
+	cannon.ai_controller.needs_reset = true
 
 func _on_cannon_hit():
 	gui.add_hit()
+
+func _on_field_cleared():
+	print("field cleared!")
+
+func _on_bonus_killer_area_entered(area):
+	if area && area is Bonus:
+		area.queue_free()
